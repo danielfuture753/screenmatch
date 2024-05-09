@@ -319,3 +319,111 @@ Además, Java también tiene otras colecciones como Set y Map. Set es una colecc
 Las colecciones de Java son extremadamente útiles en diversas situaciones, como almacenar datos en memoria, realizar operaciones de búsqueda, ordenación y filtrado. Nos ayudan a organizar y manipular grandes cantidades de datos de manera eficiente y elegante.
 
 **************************************************************************************
+
+Las constantes juegan un papel importante en la programación, permitiendo que valores fijos e inmutables se almacenen y utilicen a lo largo del código. Son especialmente útiles cuando tenemos valores que no deben modificarse durante la ejecución del programa.
+
+Al declarar una constante, es importante seguir algunas buenas prácticas. La nomenclatura de las constantes debe ser clara y descriptiva, utilizando letras mayúsculas y separando las palabras con guiones bajos (_), siguiendo el patrón conocido como "snake_case". Esto hace que el código sea más legible y comprensible para otros desarrolladores.
+
+En Java, podemos declarar una constante utilizando la palabra clave final. Por ejemplo:
+
+final int AÑO_ACTUAL = 2023;
+final String NOMBRE_EMPRESA = "Alura";
+COPIA EL CÓDIGO
+En este ejemplo, AÑO_ACTUAL y NOMBRE_EMPRESA son constantes que almacenan un valor entero y una cadena, respectivamente. El uso de la palabra clave final indica que estas variables no pueden cambiar su valor después de la asignación inicial.
+
+Además, es una buena práctica declarar las constantes como static si pertenecen a una clase y se comparten entre varios objetos. De esta manera, las constantes pueden accederse directamente a través del nombre de la clase, sin la necesidad de instanciar un objeto.
+
+java
+
+public class EJemploConstantes {
+    public static final int AÑO_ACTUAL = 2022;
+    public static final String NOMBRE_EMPRESA = "Alura";
+}
+COPIA EL CÓDIGO
+En el ejemplo anterior, las constantes ANHO_ATUAL y NOMBRE_EMPRESA se declaran como static, lo que permite que se acceda directamente a ellas a través de la clase EjemploConstantes. Por ejemplo, así es como podríamos acceder a ellas desde nuestro método main.
+
+java
+
+public class Principal {
+    public static void main(String[] args) {
+        System.out.println("Yo trabajo en la empresa " + EjemploConstantes.NOMBRE_EMPRESA);
+    }
+}
+COPIA EL CÓDIGO
+El uso de constantes aporta beneficios como facilitar el mantenimiento del código, evitar errores de escritura y hacer que el código sea más legible. Además, ayudan a evitar la repetición de valores en diferentes partes del código, promoviendo la consistencia y la reutilización.
+
+Recuerda que las constantes deben utilizarse para valores que no deben modificarse durante la ejecución del programa.
+
+**********************************************************************************************
+
+Las funciones lambda son un recurso muy útil en el lenguaje de programación Java. Pueden ayudar a simplificar nuestro código y hacerlo más fácil de leer y entender. Pero antes de avanzar, comencemos desde el principio.
+
+¿Qué son las funciones Lambda?
+
+Las funciones Lambda, también llamadas funciones anónimas, son una forma de definir funciones que se utilizan con frecuencia solo una vez, directamente en el lugar donde se van a utilizar.
+
+En la programación convencional, normalmente definimos una función en algún lugar de nuestro código y luego la llamamos por su nombre en otro lugar, siempre que necesitemos usarla.
+
+Sin embargo, a veces necesitamos una función que se utilice solo en un lugar de nuestro código. Para estos casos, puede ser más simple y directo definir esta función directamente en el lugar donde se utilizará, sin darle un nombre, es decir, utilizando una función Lambda.
+
+La principal ventaja del uso de funciones lambda es la simplificación del código y la mejora en la legibilidad, ya que la función se define justo donde se usará.
+
+¿Cómo usamos las funciones Lambda en Java?
+
+En Java, una función lambda se define de la siguiente manera:
+
+java
+
+(argumentos) -> { cuerpo-de-la-función }
+COPIA EL CÓDIGO
+Por ejemplo, podemos definir una función lambda que sume dos números de la siguiente manera:
+
+java
+
+(a, b) -> { return a + b; }
+COPIA EL CÓDIGO
+Aquí, a y b son los argumentos de nuestra función. El cuerpo de la función, que es el código que se ejecutará cuando se llame a la función, está entre llaves {}. En este caso, el cuerpo de la función es solo una línea que devuelve la suma de a y b.
+
+En Java, las funciones lambda se utilizan generalmente con interfaces funcionales. Una interfaz funcional es una interfaz que contiene solo un único método. La función lambda luego proporciona la implementación de ese único método.
+
+Ejemplos de uso de funciones Lambda
+
+Vamos a un ejemplo concreto para entenderlo mejor. Supongamos que tenemos una lista de números y queremos imprimir solo los números pares de esa lista. Sin el uso de funciones lambda, podríamos hacer algo así:
+
+List<Integer> lista = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+for(Integer i: lista) {
+  if(i % 2 == 0) {
+    System.out.println(i);
+  }
+}
+COPIA EL CÓDIGO
+Pero con el uso de funciones lambda, podemos simplificar este código:
+
+List<Integer> lista = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+lista.stream().filter(i -> i % 2 == 0).forEach(System.out::println);
+COPIA EL CÓDIGO
+En el código anterior, creamos un stream de nuestra lista, filtramos ese stream para incluir solo los números pares (esto se hace con la función lambda i -> i % 2 == 0), y finalmente usamos el método forEach para imprimir cada elemento del stream filtrado.
+
+Ahora está más claro cómo las funciones Lambda en Java pueden ayudarnos a simplificar nuestro código y hacerlo más legible.
+
+**********************************************************************************************************************************
+
+Aprendimos a iterar para buscar todas las temporadas de una serie específica, a usar las anotaciones @JsonAlias y @JsonIgnoreProperties, a actualizar enlaces durante la iteración y a imprimir listas de las temporadas buscadas de APIs.
+
+Ahora, imaginemos que necesitamos buscar todas las temporadas de una determinada serie de la API. Considerando que ya hemos buscado los datos de la serie y los hemos alimentado en la variable datosSerie, ¿cómo implementaríamos este recurso?
+
+Alternativa correta
+List<DatosTemporada> temporadas = new ArrayList<>();
+for(int i = 1; i <= datosSerie.totalTemporadas(); i++) {
+    json = consumoApi.obtenerDatos("https://www.omdbapi.com/?t="+ serie + "&season=" + i + "&apikey=6585022c");
+    DatosTemporada datosTemporada = conversor.obtenerDatos(json, DatosTemporada.class);
+    temporadas.add(datosTemporada);
+}
+
+temporadas.forEach(System.out::println);
+
+Esta es la implementación correcta para buscar todas las temporadas de una serie específica.
+
+*******************************************************************************************************************************
