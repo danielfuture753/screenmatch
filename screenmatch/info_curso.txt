@@ -427,3 +427,181 @@ temporadas.forEach(System.out::println);
 Esta es la implementación correcta para buscar todas las temporadas de una serie específica.
 
 *******************************************************************************************************************************
+
+
+**************************************** 11/05/2024 **********************************************************************************
+
+Los streams son una nueva forma de trabajar con colecciones de datos en Java, introducidas a partir de Java 8. Permiten realizar operaciones de manera más eficiente y concisa, utilizando un enfoque funcional.
+
+Un stream es una secuencia de elementos que puede procesarse en paralelo o en serie. Puede crearse a partir de una colección, un array, un archivo, entre otros. A partir de ahí, podemos realizar diversas operaciones en ese stream, como filtrar, mapear, ordenar, entre otras.
+
+Las operaciones intermedias son aquellas que pueden aplicarse en un stream y retornan un nuevo stream como resultado. Estas operaciones no se ejecutan inmediatamente, sino solo cuando se llama a una operación final.
+
+Veamos algunos ejemplos de operaciones intermedias:
+
+Filter: permite filtrar los elementos del stream basándose en una condición. Por ejemplo, podemos filtrar una lista de números para devolver solo los números pares.
+
+List<Integer> numeros = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+List<Integer> numerosPares = numeros.stream()
+                                   .filter(n -> n % 2 == 0)
+                                   .collect(Collectors.toList());
+
+System.out.println(numerosPares); // Salida: [2, 4, 6, 8, 10]
+COPIA EL CÓDIGO
+Map: permite transformar cada elemento del stream en otro tipo de dato. Por ejemplo, podemos transformar una lista de cadenas en una lista de sus respectivas longitudes.
+
+List<String> palabras = Arrays.asList("Java", "Stream", "Operaciones", "Intermedias");
+
+List<Integer> tamaños = palabras.stream()
+                                .map(s -> s.length())
+                                .collect(Collectors.toList());
+
+System.out.println(tamaños); // Salida: [4, 6, 11, 17]
+COPIA EL CÓDIGO
+Las operaciones finales son aquellas que cierran el stream y devuelven un resultado concreto. Algunas operaciones finales comunes son forEach, collect y count.
+
+Veamos algunos ejemplos de operaciones finales:
+
+ForEach: permite ejecutar una acción en cada elemento de la stream. Por ejemplo, podemos imprimir cada elemento de la lista.
+
+java
+
+List<String> nombres = Arrays.asList("Juan", "Maria", "Pedro", "Ana");
+
+nombres.stream()
+     .forEach(nombre -> System.out.println("Hola, " + nombre + "!"));
+COPIA EL CÓDIGO
+// Salida:
+
+// Hola, Juan!
+
+// Hola, Maria!
+
+// Hola, Pedro!
+
+// Hola, Ana!
+
+Collect: permite recopilar los elementos de la stream en una colección o en otro tipo de dato. Por ejemplo, podemos recopilar los números pares en un conjunto.
+
+List<Integer> numeros = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+Set<Integer> numerosPares = numeros.stream()
+                                   .filter(n -> n % 2 == 0)
+                                   .collect(Collectors.toSet());
+
+System.out.println(numerosPares); // Salida: [2, 4, 6, 8, 10]
+COPIA EL CÓDIGO
+En resumen, los streams y sus operaciones intermedias y finales son una forma poderosa de manipular colecciones de datos en Java de manera más eficiente y concisa. Permiten escribir código más legible y expresivo, facilitando el procesamiento y la transformación de datos.
+
+Además de las operaciones intermedias y finales mencionadas, hay muchas otras disponibles, como distinct (que elimina elementos duplicados), limit (que limita el número de elementos de la stream), skip (que salta los primeros elementos del stream), reduce (que combina los elementos de la stream en un único resultado) y muchas más.
+
+Los streams en Java son una herramienta poderosa para la manipulación de colecciones de datos. Las operaciones intermedias permiten filtrar, mapear y ordenar los elementos del stream, mientras que las operaciones finales cierran el stream y devuelven un resultado concreto. Combinando estas operaciones, podemos realizar transformaciones y acciones de manera concisa y eficiente.
+
+***************************************************************************************************************************
+
+Vamos a explorar un tema muy interesante y muy útil en Java: los Constructores Personalizados. Estos son como un comando especial que usamos para crear e inicializar objetos de una clase. El constructor personalizado nos permite definir cómo queremos crear nuestros objetos, permitiéndonos inicializar las propiedades de la clase con los valores que especificamos. En última instancia, esto nos da más control sobre la forma en que se crean nuestros objetos.
+
+¿Cuándo son útiles los Constructores Personalizados?
+
+Consideremos un ejemplo simple. Supongamos que estás creando una clase de Carro en Java, donde cada carro tiene una marca, un modelo y un año.
+
+Sin un constructor personalizado, tendrías que crear un carro de esta manera:
+
+java
+
+Carro miCarro = new Carro();
+miCarro.setMarca("Toyota");
+miCarro.setModelo("Corolla");
+miCarro.setAno(2015);
+Esto no es eficiente y también puede dar lugar a errores, ya que nada impide crear un carro sin definir todas las propiedades.
+COPIA EL CÓDIGO
+Ahora, usando un constructor personalizado:
+
+java
+
+public class Carro {
+    private String marca;
+    private String modelo;
+    private int ano;
+
+    // Constructor personalizado
+    public Carro(String marca, String modelo, int ano) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.ano = ano;
+    }
+}
+COPIA EL CÓDIGO
+Ahora puedes crear un nuevo Carro de manera mucho más fácil y segura:
+
+java
+
+Carro miCarro = new Carro("Toyota", "Corolla", 2015);
+COPIA EL CÓDIGO
+El uso de constructores personalizados asegura que todos los carros que creamos tengan todas las propiedades necesarias definidas.
+
+Posibles problemas al usar Constructores Personalizados A pesar de ser útiles, los constructores personalizados deben usarse correctamente para evitar problemas.
+
+Un problema común es la sobrecarga de constructores, donde tienes muchos constructores en la misma clase. Esto puede hacer que tu código sea confuso y difícil de mantener.
+
+Otro problema puede surgir al utilizar la herencia. Si la clase padre tiene un constructor personalizado, la clase hija debe llamar explícitamente a ese constructor, o el compilador devolverá un error.
+
+Además, si no defines un constructor por defecto (un constructor sin argumentos), Java no creará uno por ti si tienes algún constructor personalizado. Esto puede ser un problema si necesitas crear un objeto sin inicializar ninguna propiedad.
+
+En resumen, los constructores personalizados en Java son una herramienta muy útil en la creación de objetos, asegurando que todas las propiedades necesarias se inicialicen. Sin embargo, deben usarse con cuidado para evitar problemas de sobrecarga y herencia. Como siempre, la mejor estrategia es usar la herramienta adecuada para el trabajo correcto y mantener tu código simple y limpio.
+
+*****************************************************************************************************************************************
+
+La inmutabilidad de los datos es un concepto fundamental en programación que se refiere a la característica de que un objeto o valor no puede ser alterado después de ser creado. Esto aporta varios beneficios, como la seguridad y confiabilidad del código, ya que los datos inmutables no pueden ser modificados o corrompidos accidentalmente.
+
+Además, la inmutabilidad promueve la concurrencia segura en entornos de múltiples hilos, ya que cada hilo puede trabajar con copias de los datos inmutables sin interferir en los demás. La inmutabilidad también hace que el código sea más legible y facilita el mantenimiento, ya que el flujo de información es más claro y predecible.
+
+En Java, podemos crear objetos inmutables utilizando clases finales, atributos finales y métodos que no modifican el estado interno del objeto. Esta práctica es esencial para desarrollar programas más robustos y confiables.
+
+En el video de la lección anterior, vimos que al utilizar streams, una de las operaciones finales nos permite colocar los datos generados en otra lista. También vimos que si utilizamos directamente toList() para este propósito, se genera una lista inmutable. Por lo tanto, cuando necesitamos que la nueva lista pueda modificarse, tenemos que utilizar collect(Collectors.toList()).
+
+En Java, algunas clases nativas ya son inmutables. Algunos ejemplos incluyen:
+
+String: La clase java.lang.String es inmutable. Una vez creada, una instancia de String no puede ser modificada.
+Clases Wrapper: Las clases que representan los tipos primitivos, como Integer, Double, Character, etc., también son inmutables.
+Enum: Las enumeraciones (enum) en Java son inmutables. Las instancias de un enum se crean solo una vez y no pueden ser modificadas.
+Además de las clases nativas, la API de colecciones de Java también ofrece algunas clases inmutables en la clase utilitaria Collections. Estas clases se utilizan para crear colecciones inmutables, como listas, conjuntos y mapas. Algunos ejemplos incluyen:
+
+Collections.unmodifiableList: Crea una lista inmutable a partir de una lista existente.
+Collections.unmodifiableSet: Crea un conjunto inmutable a partir de un conjunto existente.
+Collections.unmodifiableMap: Crea un mapa inmutable a partir de un mapa existente.
+Estas clases te permiten crear versiones inmutables de colecciones existentes, haciéndolas seguras para compartir y evitando la modificación accidental.
+
+Aquí tienes un ejemplo de código:
+
+public class EjemploInmutabilidad {
+    public static void main(String[] args) {
+        List<String> listaOriginal = new ArrayList<>();
+        listaOriginal.add("A");
+        listaOriginal.add("B");
+
+        List<String> listaInmutable = Collections.unmodifiableList(listaOriginal);
+
+        // Intentar agregar un elemento a la lista inmutable resultará en una excepción
+        listaInmutable.add("C"); // Lanzará UnsupportedOperationException
+    }
+}
+
+********************************************************************************************************************************
+
+
+Trabajas desarrollando aplicaciones en un banco digital y una de tus tareas es gestionar y analizar de manera eficiente una enorme cantidad de datos relacionados con las inversiones y saldos de los clientes, con el fin de ofrecerles líneas de crédito adecuadas al saldo que tienen en cuenta.
+
+En este contexto, debes filtrar a los clientes con cuenta corriente y ordenarlos considerando el saldo, en orden descendente, y luego mostrar los cinco clientes con el mayor saldo en cuenta.
+
+Dado que la variable datosClientes ya está poblada con la lista completa de clientes y que los métodos para obtener el tipo de cuenta y el saldo son getTipoCuenta() y getSaldo(), respectivamente, ¿cuál de los siguientes códigos realizará la funcionalidad correctamente?
+
+  datosClientes.stream()
+                 .filter(c -> c.getTipoCuenta().equalsIgnoreCase("corriente"))
+                 .sorted(Comparator.comparingDouble(Cuenta::getSaldo).reversed())
+                 .limit(5);
+
+
+**********************************************************************************************************************************+++++++++
+
