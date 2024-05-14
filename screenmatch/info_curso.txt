@@ -603,5 +603,310 @@ Dado que la variable datosClientes ya está poblada con la lista completa de cli
                  .limit(5);
 
 
-**********************************************************************************************************************************+++++++++
+*************************** 13/05/2024 *******************************************************************************************************+++++++++
 
+Necesitas mostrar una lista de las 10 mejores películas lanzadas en un año determinado. Para ello, tendrás en cuenta el total de visualizaciones, que debe ser mayor o igual a 10 mil, y la calificación de los clientes, que debe ser mayor o igual a 9.4. Considera la clase Pelicula a continuación:
+
+   public class Pelicula {
+       private String titulo;
+       private Integer totalVisualizacion;
+       private Double evaluacion;
+       private Integer añoLanzamiento;
+       
+       // getters, setters y toString() omitidos
+   }
+COPIA EL CÓDIGO
+Dado que List<Pelicula> peliculas ya está poblada con todas las películas y deseas conocer las mejores películas de 2022, ¿cómo realizarías el código para llevar a cabo esta tarea?
+
+   peliculas.stream()
+                   .filter(pelicula -> pelicula.getAñoLanzamiento() == 2022)
+                   .filter(pelicula -> pelicula.getTotalVisualizacion() >= 10000 && pelicula.getEvaluacion() >= 9.4)
+                   .sorted(Comparator.comparingDouble(Pelicula::getEvaluacion).reversed())
+                   .limit(10)
+                   .forEach(System.out::println);
+
+Creamos un stream y utilizamos dos veces el método filter, uno para seleccionar solo las películas lanzadas en 2022 y otro para filtrar las películas según los criterios establecidos. Luego, usamos sorted para ordenar por la calificación de forma descendente y luego utilizamos el método limit para limitar la lista a 10 películas. Finalmente, usamos la operación forEach para imprimir los datos de la película.
+
+*******************************************************************************************************
+
+
+
+Para trabajar con fechas, podemos importar el paquete que contiene varias clases de fecha y hora, el java.time. Esta API de fechas fue introducida en Java 8 con la idea de resolver los problemas de las antiguas clases y facilitar el uso de fechas en Java. ¿Vamos a conocer algunas funcionalidades?
+
+Patrones
+
+Los formatos de fecha y hora se especifican mediante cadenas estándar de fecha y hora. La siguiente tabla muestra la sintaxis estándar que debe utilizarse para el patrón de formato:
+
+Letra	Componente fecha/hora	Ejemplo
+G	Designador de era	DC
+y	Año	2010; 10
+M	Mes en el año	Julio; jul; 10
+w	Semana en el año	27
+W	Semana en el mes	2
+D	Día en el año	189
+d	Día en el mes	10
+F	Día de la semana en el mes	2
+E	Día de la semana	Martes; ter
+a	Marcador de am/pm	PM
+H	Hora en el día (0-23)	0
+k	Hora en el día (1-24)	24
+K	Hora en am/pm (0-11)	0
+h	Hora en am/pm (1-12)	12
+m	Minuto en la hora	30
+s	Segundo en el minuto	55
+S	Fracción de un segundo	978
+Ejemplo:
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Fechas {
+
+    public static void main(String[] args) {
+
+        String patron = "E, dd MMM yyyy HH:mm:ss z";
+        SimpleDateFormat formatoFecha = new SimpleDateFormat(patron);
+        String fecha = formatoFecha.format(new Date());
+        System.out.println(fecha);
+
+    }
+}
+COPIA EL CÓDIGO
+Este código producirá:
+
+sáb., 19 nov. 2022 02:58:14 BRT:
+
+Local Date Time
+
+Hora y fecha actuales
+
+LocalDateTime representa una fecha con la hora, visto como año-mes-día-hora-minuto-segundo. El tiempo se representa como yyyy-MM-dd-HH-mm-ss.zzz.
+
+import java.time.LocalDateTime;
+
+public class FechaHorario {
+
+    public static void main(String[] args) {
+        LocalDateTime hoy= LocalDateTime.now();
+        System.out.println(hoy);
+    }
+}
+COPIA EL CÓDIGO
+Resultado:
+
+2022-11-19T04:11:17.108565200
+
+Date Time Formatter
+
+Debes haber notado que los resultados están en formatos con los que no estamos acostumbrados a trabajar. ¡Entonces, podemos trabajar con varios formateadores de fechas existentes!
+
+Ejemplos de formatos de fecha y hora:
+
+Formato Ejemplo
+
+MM/dd/yyyy 19/11/2022
+
+dd-M-yyyy hh:mm:ss 19-11-22 12:07:23
+
+dd MMMM yyyy 19 de noviembre de 2022
+
+dd MMMM yyyy zzzz 19 de noviembre de 2022, Hora estándar de Brasilia
+
+E, dd MMM yyyy HH:mm:ss z Sáb, 19 de noviembre de 2022, 12:07:23 BRT
+
+Además, también podemos cambiar la forma de mostrar el mes. Si usamos letras en cantidades diferentes, el resultado también será consecuentemente diferente. Veamos:
+
+Tipo Por defecto Ejemplo
+
+Mes completo MMMM Septiembre
+
+Mes abreviado MMM Set.
+
+Mes numérico MM 09
+
+Para formatear, utilizaremos DateTimeFormatter. Hay varios ya preparados, pero aún tienes la alternativa de crear tu propio formato en el patrón ya conocido de dd/MM/yyyy hh:mm:ss.
+
+Para hacer esto, simplemente utiliza el método ofPattern. Como vimos en las tablas anteriores, podemos elegir cómo se imprimirá.
+
+DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
+COPIA EL CÓDIGO
+Ahora, podemos, a partir de nuestra fecha, en este caso hoy, llamar al método format y pasarle este formateador:
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class Formateando {
+
+    public static void main(String[] args) {
+        LocalDateTime hoy = LocalDateTime.now();
+        System.out.println(hoy);
+
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
+        LocalDateTime ahora = LocalDateTime.now();
+        System.out.println(hoy.format(formateador));
+
+    }
+}
+COPIA EL CÓDIGO
+Ahora sí, al ejecutar, obtenemos el resultado:
+
+19/11/2022 04:38:11
+
+*************************************************************************************************************************************
+
+
+Como hemos estudiado en el curso, los Streams nos permiten manipular colecciones de elementos (como Listas o Conjuntos) de una manera más sofisticada y eficiente que los métodos tradicionales. Son especialmente útiles cuando necesitamos realizar operaciones a gran escala en estos elementos, como filtrar, transformar o agregar.
+
+¿Y qué es la función Peek?
+
+La función "peek" es una operación intermedia de una stream. Una operación intermedia es aquella que procesa los datos del stream pero no la finaliza, es decir, permite que se realicen más operaciones después de ella. La función peek se utiliza para "espiar" los elementos del stream sin alterarlos, lo que puede ser muy útil para la depuración. Esta función recibirá cada elemento del stream y realizará alguna operación con efecto secundario (como imprimir el elemento), pero devolverá el mismo elemento sin cambiar nada.
+
+¿Por qué debería usar esto?
+
+El uso de Streams y la función peek puede ayudarte a escribir códigos más elegantes, fáciles de leer y reducir la posibilidad de errores. Además, pueden hacer que tu código se ejecute más rápido en ciertos casos, ya que los Streams permiten la paralelización de las operaciones, es decir, ejecutar varias operaciones al mismo tiempo.
+
+Ejemplos de código
+
+Ahora veamos un ejemplo simple de cómo podemos usar la función peek con streams. Imagina que tenemos una lista de números y queremos multiplicar cada uno de ellos por 2 y luego sumar los resultados.
+
+List<Integer> numeros = Arrays.asList(1, 2, 3, 4, 5);
+
+int suma = numeros.stream()
+                .peek(n -> System.out.println("Elemento: " + n))
+                .map(n -> n * 2)
+                .peek(n -> System.out.println("Contenido después del map: " + n))
+                .reduce(0, (total, numero) -> total + numero);
+
+System.out.println("La suma de los números es: " + suma);
+COPIA EL CÓDIGO
+En este código, creamos una stream con la lista de números, espiamos cada número para imprimirlo (con la función .peek), multiplicamos el valor por dos, volvemos a espiar para verificar el valor de la multiplicación y luego sumamos los resultados.
+
+Así es como aparece en la terminal después de ejecutar la aplicación:
+
+Elemento: 1
+
+Contenido después del map: 2
+
+Elemento: 2
+
+Contenido después del map: 4
+
+Elemento: 3
+
+Contenido después del map: 6
+
+Elemento: 4
+
+Contenido después del map: 8
+
+Elemento: 5
+
+Contenido después del map: 10
+
+La suma de los números es: 30
+
+Esto nos ayuda a asegurarnos de que el proceso se esté realizando correctamente. Aquí podemos ver que la suma de los números 2 + 4 + 6 + 8 + 10 se calculó correctamente, dando como resultado 30. Es decir, la función lambda en nuestro método reduce está haciendo exactamente lo que se planeó. Y pudimos verificar esto con el peek.
+
+Este es solo un ejemplo básico, pero recuerda que la función peek se puede usar en cualquier lugar dentro de tu stream, siempre que desees ver qué elementos están pasando por ese punto.
+
+******************************************************************************************************************
+
+Estás trabajando como persona desarrolladora en Gatito Petshop. El proyecto actual implica el uso de Spring Boot API y Java Streams. Durante tu actividad, recuerdas que la función 'peek' puede ser muy útil para seguir el procesamiento de los streams y facilitar el proceso de depuración. Decides aplicar esta función, pero necesitas recordar cómo funciona.
+
+¿Cómo aplicarías la función 'peek' en una lista de objetos Pet (animales) para imprimir cada elemento mientras se procesa?
+
+
+   pets.stream()
+       .peek(System.out::println)
+       .collect(Collectors.toList());
+
+La función 'peek' se utiliza correctamente. Recibe una función lambda como parámetro y actúa sobre cada elemento del stream, en este caso, imprimiéndolos. La operación 'collect' transforma el stream de vuelta en una lista.
+
+***************************************************************************************************************************************************
+
+La programación en Java utiliza Contenedores para almacenar, acceder y manipular datos. Un ejemplo particularmente útil es el Optional, un contenedor especial que puede contener o no un valor. Así que descubramos más sobre el Optional, cómo usarlo y qué prácticas seguir.
+
+¿Qué es el Optional?
+
+Optional es un contenedor de un solo valor introducido en Java 8. Puede contener un valor único o ningún valor. El principal uso de Optional es proporcionar un tipo de retorno alternativo cuando un método puede no devolver un valor.
+
+Usar null es una práctica común, pero puede llevar a errores como NullPointerException. Optional ayuda a evitar estos errores proporcionando una manera más segura de manejar valores que pueden o no estar presentes.
+
+¿Cómo usar el Optional?
+
+Creemos un método que puede devolver un valor null. Sin Optional, podría causar errores no deseados, pero con Optional, es más seguro:
+
+public Optional<String> getNombre() {
+    // El nombre puede ser null
+    return Optional.ofNullable(nombre);
+}
+COPIA EL CÓDIGO
+Aquí, Optional.ofNullable(nombre) creará un Optional que contiene el valor de nombre si no es null. Si es null, creará un Optional vacío.
+
+Ahora, para acceder al valor dentro de Optional, podemos usar ifPresent y orElse así:
+
+Optional<String> optionalNombre = getNombre();
+
+optionalNombre.ifPresent(System.out::println); // Imprimirá el nombre solo si no es null
+
+String nombre = optionalNombre.orElse("Nombre no disponible"); // Devolverá "Nombre no disponible" si nombre es null
+COPIA EL CÓDIGO
+Mejores prácticas
+
+Aunque Optional es un aliado útil, hay algunas cosas que deben tenerse en cuenta para usarlo de manera efectiva:
+
+Prefiera el retorno de Optional en lugar de devolver null: Esto hace que sus intenciones sean claras y evita errores.
+
+No use Optional.get() sin Optional.isPresent(): Optional.get() lanzará un error si el valor no está presente. Por lo tanto, es mejor verificar antes si el valor está presente.
+
+No use Optional para campos de la clase o parámetros del método: Optional debe usarse principalmente para retornos de métodos que pueden no tener valor.
+
+Comprender y usar Optional correctamente puede llevar a un código más limpio y menos propenso a errores, así que vale la pena invertir tiempo para aprenderlo.
+
+*****************************************************************************************************************************************************
+
+Trabajar en actividades paralelas es una práctica esencial en programación, ya que permite ejecutar varias tareas simultáneamente, aumentando la eficiencia del código. Una de las formas de lograr la programación paralela en Java es mediante el uso de threads.
+
+Las threads son unidades independientes de ejecución que pueden crearse dentro de un programa. Permiten que diferentes partes del código se ejecuten al mismo tiempo, mejorando el rendimiento y la capacidad de respuesta del programa.
+
+findAny
+
+Una operación útil para trabajar con threads es el método findAny en colecciones de datos. Este método se utiliza para encontrar cualquier elemento que cumpla con una condición específica en una colección. Devuelve un Optional, que puede contener el elemento encontrado o estar vacío si ningún elemento cumple con la condición.
+
+Al utilizar findAny en una colección con threads, cada thread puede buscar un elemento de la colección de manera paralela, haciendo que la búsqueda sea más rápida y eficiente. Es importante destacar que findAny no garantiza que siempre se devolverá el mismo elemento, ya que el orden de búsqueda puede variar entre las threads.
+
+Para utilizar findAny con threads, puedes crear una implementación de Predicate que defina la condición que los elementos deben cumplir. Luego, puedes utilizar el método parallelStream en una colección para crear un stream paralelo y llamar a findAny, pasando el Predicate como argumento. Veamos un ejemplo:
+
+public class EjemploFindAnyParallelStream {
+    public static void main(String[] args) {
+        List<Integer> numeros = new ArrayList<>();
+        for (int i = 1; i <= 100; i++) {
+            numeros.add(i);
+        }
+
+        // Utilizando parallelStream para encontrar un elemento cualquiera en paralelo
+        Optional<Integer> numeroCualquiera = numeros.parallelStream()
+                .filter(numero -> numero % 10 == 0) // Filtra los números que son múltiplos de 10
+                .findAny();
+
+        if (numeroCualquiera.isPresent()) {
+            System.out.println("Encontrado: " + numeroCualquiera.get());
+        } else {
+            System.out.println("Ningún número encontrado.");
+        }
+    }
+}
+COPIA EL CÓDIGO
+En este ejemplo, tenemos una lista de números del 1 al 100. Utilizando parallelStream, filtramos los números que son múltiplos de 10 y luego utilizamos findAny para encontrar cualquier elemento que cumpla con esta condición.
+
+Dado que la búsqueda se realiza en paralelo, el resultado puede variar en cada ejecución del programa, ya que diferentes threads pueden encontrar elementos diferentes del stream. La salida en la consola podría ser, por ejemplo:
+
+Encontrado: 70
+
+o
+
+Encontrado: 50
+
+o cualquier otro número que sea múltiplo de 10 dentro de la lista.
+
+Cabe destacar que, para algunos tipos de streams, como streams de listas o arrays, se mantiene el orden de los elementos. Sin embargo, en un stream paralelo, la búsqueda se realizará de manera concurrente y el resultado puede ser cualquier elemento que cumpla con la condición de filtrado. Por lo tanto, en streams paralelos, el método findAny puede ser más útil para obtener cualquier elemento sin garantía de un resultado específico.

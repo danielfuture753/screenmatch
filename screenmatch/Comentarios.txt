@@ -5,3 +5,7 @@
 Esto se hace debido a que como d.evaluacion se esta sacando del record, es un String pero en esta clase lo estamos usando como un doble
 
 En este caso pasa algo muy similar nuestra fecha es un localdate y necesitamos convertirla por que es un tipo de dato diferente en el record
+
+FindFirt retorna un optional eso quiere decir que puede tener o no un resultado en base a la operacion que se esta haciendo si es correcta o no 
+
+Cuando se deja el get solo nos trae todos los datos, cuando se hace .get().getTitulo() nos empieza  a traer los datos unicamente solicitados
