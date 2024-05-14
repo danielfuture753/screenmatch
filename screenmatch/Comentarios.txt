@@ -1,0 +1,7 @@
+
+
+
+
+Esto se hace debido a que como d.evaluacion se esta sacando del record, es un String pero en esta clase lo estamos usando como un doble
+
+En este caso pasa algo muy similar nuestra fecha es un localdate y necesitamos convertirla por que es un tipo de dato diferente en el record

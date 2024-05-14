@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.aluracursos.screenmatch.model.DatosEpisodio;
 import com.aluracursos.screenmatch.model.DatosSerie;
 import com.aluracursos.screenmatch.model.DatosTemporadas;
+import com.aluracursos.screenmatch.model.Episodio;
 import com.aluracursos.screenmatch.service.ConsumoAPI;
 import com.aluracursos.screenmatch.service.ConvierteDatos;
 
@@ -62,6 +63,14 @@ public class Principal {
                         .sorted(Comparator.comparing(DatosEpisodio::Evaluacion).reversed())
                         .limit(5)
                         .forEach(System.out::println);
+
+        //Convirtiendo los datos a una lista del tipo Episodio
+        List<Episodio> episodios = temporadas.stream() //stream datos temporada
+                            .flatMap(t -> t.episodios().stream()
+                                        .map(d -> new Episodio(t.numero(),d)))
+                            .collect(Collectors.toList());
+
+        episodios.forEach(System.out::println);
     }
 
 }
