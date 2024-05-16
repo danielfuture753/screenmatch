@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +32,9 @@ public class Principal {
     private ConvierteDatos conversor = new ConvierteDatos();
 
 
+    /**
+     * 
+     */
     public void muestraElMenu(){
         System.out.println("Por favor escribe el nombre de la serie que desas buscar!");
         // busca los datos generales de las series 
@@ -123,10 +127,15 @@ public class Principal {
                     .filter( e -> e.getEvaluacion() > 0.0)
                     .collect(Collectors.groupingBy(Episodio::getTemporada, Collectors.averagingDouble(Episodio::getEvaluacion)));
         System.out.println(evaluacionesPorTemporada);
+        
+
+        DoubleSummaryStatistics est = episodios.stream() // [comentarios]  (file:///F:/CURSO/CURSOS/CLONE_GITHUB/screenmatch/screenmatch/Comentarios.txt#L13)
+                    .filter(e-> e.getEvaluacion() > 0.0)
+                    .collect(Collectors.summarizingDouble(Episodio::getEvaluacion));
+        System.out.println(est);
+        System.out.println("Media de las evaluaciones " + est.getAverage());
+        System.out.println("Episodio mejor ealuadi " + est.getMax());
+        System.out.println(" Episodio peor evaluado " + est.getMin());
 
     }
-
-   
-  
-
 }

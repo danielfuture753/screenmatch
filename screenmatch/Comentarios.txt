@@ -9,3 +9,5 @@ En este caso pasa algo muy similar nuestra fecha es un localdate y necesitamos c
 FindFirt retorna un optional eso quiere decir que puede tener o no un resultado en base a la operacion que se esta haciendo si es correcta o no 
 
 Cuando se deja el get solo nos trae todos los datos, cuando se hace .get().getTitulo() nos empieza  a traer los datos unicamente solicitados
+
+El DoubleSummaryStatistics nos trae los parametros count = que es la cantidad de registros que esta tomando sum = la suma de todas laas evaluacioes , min,  el averaga y el max
