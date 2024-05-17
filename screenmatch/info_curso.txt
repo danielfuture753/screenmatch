@@ -1035,5 +1035,206 @@ Recuerda que Java Streams es una herramienta poderosa que puede hacer que tu có
 
 publicapis.dev/
 
+***************************************16/05/2024 **************************************************************************************************************************
+
+Nuestra clase DatosSerie no está reflejando de manera completa toda la información que queremos buscar y almacenar en nuestra aplicación. Dado que vamos a almacenar series en la base de datos, sería ideal que describa más los datos, teniendo más atributos. Por lo tanto, te desafiamos a mejorar la búsqueda y agregar datos como:
+
+Género;
+Actores;
+Póster;
+Sinopsis.
+Proponemos que realices el mapeo y ejecutes la aplicación nuevamente. Verifica si todos los datos se guardaron correctamente. En el próximo vídeo, mostraremos nuestra implementación en ejecución.
+
 *****************************************************************************************************************************************************************
 
+Anteriormente, utilizamos un nuevo tipo de representación de datos, el Enum.
+
+Enum es una abreviatura de "enumerados" y es un tipo especial de clase en Java que tiene un número fijo de constantes. Utilizar un Enum puede ser muy útil en programación para almacenar valores que sabemos que nunca cambiarán, como los días de la semana o las fases de la luna.
+
+Vamos a empezar creando nuestro propio Enum. Imagina que estamos construyendo una aplicación sobre el sistema solar y queremos un Enum para los planetas.
+
+A continuación, te muestro un ejemplo de cómo podrías implementarlo:
+
+public enum Planetas{
+    MERCURIO,
+    VENUS,
+    TIERRA,
+    MARTE,	
+    JÚPITER,
+    SATURNO,
+    URANO,
+    NEPTUNO
+}
+COPIA EL CÓDIGO
+Como puedes ver, un Enum en Java es muy similar a una clase. Sin embargo, en lugar de usar la palabra clave 'class', usamos 'enum'. También debemos representar las constantes, que están separadas por comas y escritas en mayúsculas.
+
+Ahora que hemos creado nuestro Enum, podemos empezar a usarlo en nuestro código. En el ejemplo a continuación, definimos un método que recibe un planeta como argumento e imprime un mensaje. Échale un vistazo:
+
+public void cualPlaneta(Planetas planeta){
+    switch(planeta){
+        case Tierra:
+            System.out.println(“Usted está en la tierra”);
+        default:
+            System.out.println(“Usted no está en la tierra”);
+        break;
+            
+   }
+
+}
+COPIA EL CÓDIGO
+En la función cualPlaneta, podemos pasar cualquier planeta definido en nuestro Enum. Si pasamos TIERRA, la función imprimirá "Usted está en la Tierra!", de lo contrario, imprimirá "Usted no está en la Tierra!".
+
+Manejo de Datos Categóricos
+
+Uno de los usos más prácticos de Enums es para el manejo de datos categóricos. Los datos categóricos son tipos de datos que pueden dividirse en varios grupos o categorías. La ventaja de usar Enums es que pueden ayudar a garantizar que solo utilizaremos los valores predefinidos, evitando la ocurrencia de errores.
+
+Por ejemplo, si estamos creando una aplicación sobre animales y tenemos una categoría llamada 'TipoAnimal', podríamos usar un Enum para definir esa categoría:
+
+public enum tipoAnimal(){
+    MAMÍFERO,
+    REPTIL,
+    AVE,
+    PEZ
+}
+COPIA EL CÓDIGO
+Ahora, en nuestro código, sólo podemos elegir entre esas cuatro opciones cuando definimos un tipo de animal, lo que hace que nuestro código sea más seguro y fácil de entender.
+
+En resumen, los Enums en Java son una manera útil y efectiva de manejar información estática y categórica en nuestros programas. Además, hacen que nuestro código sea más seguro, ya que solo permitimos los valores que ya han sido definidos en el Enum, evitando errores o confusiones.
+
+*****************************************************************************************************************************************************************
+
+En Java, un método estático es un método que pertenece a la clase y no a un objeto específico de esa clase. En términos sencillos, un método estático es aquel que puede ser utilizado incluso si no has creado ningún objeto de la clase.
+
+Si necesitas un método que no tenga que interactuar con los atributos u otros métodos de un objeto, crear un método estático puede ser una solución elegante y eficiente. Por ejemplo, podrías crear un método estático para calcular el promedio de un conjunto de números.
+
+Además, los métodos estáticos se utilizan ampliamente en bibliotecas auxiliares, como la clase Math y la clase Arrays de Java. En lugar de requerir que el usuario cree un objeto para usar los métodos, los métodos son estáticos y, por lo tanto, se pueden acceder directamente desde la clase.
+
+¿Cómo los utilizo en Java?
+
+Veamos un código de ejemplo para entender esto mejor:
+
+public class MathUtils {
+    public static int add(int a, int b) {
+        return a + b;
+    }
+}
+COPIA EL CÓDIGO
+En el código anterior, tenemos un método estático llamado "add" que suma dos números. Observa que usamos la palabra clave 'static' para definirlo. ¿Cómo lo utilizamos? Aquí tienes:
+
+int result = MathUtils.add(5, 10);
+COPIA EL CÓDIGO
+¿Viste? No necesitamos crear un objeto de MathUtils para usar el método "add".
+
+Comprender cómo funcionan los métodos estáticos en Java es de gran importancia, ya que permiten realizar operaciones sin la necesidad de crear objetos y también se utilizan ampliamente en las bibliotecas de Java.
+
+*****************************************************************************************************************************************************************
+
+Su misión como desarrollador del proyecto DEVSPOT Portfolio es crear un sistema de clasificación de proyectos. Ha decidido que utilizará enumeraciones, dado que trabajará con clasificaciones: "Principiante", "Intermedio" y "Avanzado". Además, desea asociar una puntuación para cada nivel.
+
+public enum Nivel {
+    Iniciante(1), 
+    Intermedio(2), 
+    Avanzado(3);
+    
+    private int puntuacion;
+    Nivel(int puntuacion) {
+        this.puntuacion = puntuacion;
+    }
+}
+
+La puntuación está definida correctamente como un atributo para cada nivel en la enumeración. La enumeración tiene un constructor que le permite asignar un valor a este atributo.
+
+*****************************************************************************************************************************************************************
+
+Enseguida vamos a consumir la API de ChatGPT para trabajar con la traducción de la sinopsis. Para ello, vamos a utilizar la clase ConsultaChatGPT en el paquete service. El código de la clase es el siguiente:
+
+package com.aluracursos.screenmatch.service;
+
+import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.service.OpenAiService;
+
+public class ConsultaChatGPT {
+    public static String obtenerTraduccion(String texto) {
+        OpenAiService service = new OpenAiService("TU-API-KEY");
+
+        CompletionRequest requisicion = CompletionRequest.builder()
+                .model("gpt-3.5-turbo-instruct")
+                .prompt("traduce a español el siguiente texto: " + texto)
+                .maxTokens(1000)
+                .temperature(0.7)
+                .build();
+
+        var respuesta = service.createCompletion(requisicion);
+        return respuesta.getChoices().get(0).getText();
+    }
+}
+COPIA EL CÓDIGO
+
+también necesitaremos adicionar una dependencia a nuestro “pom.xml”
+
+<dependency>
+<groupId>com.theokanning.openai-gpt3-java</groupId>
+<artifactId>service</artifactId>
+<version>0.14.0</version>
+</dependency>
+
+¿Cómo implementaría este Enum con los atributos para admitir esta funcionalidad?
+
+
+*****************************************************************************************************************************************************************
+
+Para el desarrollo de este curso, vamos a utilizar la API de ChatGPT y será necesario tener una cuenta en la plataforma de OpenAI, que distribuye el servicio de generación de texto.
+
+ChatGPT es un programa de computadora creado por OpenAI que puede entender y escribir texto en lenguaje humano, como en un chat o una conversación. Es como un asistente virtual que responde a tus preguntas y ayuda en tareas que involucran palabras.
+
+Entonces, ¿creamos una cuenta en el sitio de OpenAI?
+
+1 - Para empezar, accedemos al sitio de OpenAI, donde nos encontraremos con la siguiente pantalla:
+
+
+
+Y vamos a hacer click en “Get started”.
+
+2 - Inmediatamente después, seremos redirigidos a una página de registro en el sitio, que nos ofrecerá la opción de registrarnos utilizando el correo electrónico, así como con las cuentas de Google, Microsoft o Apple. Como se muestra a continuación:
+
+
+
+Vamos a llenar el campo de texto destinado al correo electrónico y hacemos clic en el botón "Continuar".
+
+3 - Una vez que hayamos ingresado el correo electrónico, seremos redirigidos a la segunda parte del registro, donde estableceremos la contraseña de la cuenta, como se muestra a continuación:
+
+
+
+Para avanzar, vamos establecer una contraseña segura en el cuadro de texto "Contraseña" y luego hacer clic en el botón "Continuar".
+
+4 - Con esto, seremos redirigidos a una página que nos informa que OpenAI enviará un correo electrónico para confirmar la cuenta, al correo electrónico registrado previamente.
+
+
+
+5 - Al acceder al correo electrónico registrado y abrir el mensaje enviado por OpenAI, nos encontraremos con algo como se muestra a continuación:
+
+
+
+Donde haremos clic en el botón "Verify email address" para verificar la dirección de correo electrónico.
+
+6 - Después de hacer clic en el enlace, seremos redirigidos nuevamente a una página de registro de OpenAI, donde se solicitan las siguientes información: nombre, apellido, organización (opcional) y fecha de nacimiento, como se muestra:
+
+
+
+En esta pantalla, llenaremos nuestros datos y haremos clic en el botón "Continuar".
+
+7 - Luego, seremos redirigidos a una página que solicitará la verificación mediante el número de teléfono celular, similar a la que se muestra a continuación:
+
+
+
+En esta página, elegiremos el país, que generalmente ya está preseleccionado, y llenaremos el número de teléfono celular que recibirá un SMS con el código de verificación del número. Después de completar esto, podemos hacer clic en el botón "Send Code".
+
+8 - Finalmente, verificaremos la bandeja de mensajes del teléfono celular con el número registrado, ya que se enviará un código de confirmación, mientras somos redirigidos a la página siguiente:
+
+
+
+Donde llenaremos el campo con el código recibido por mensaje de texto.
+
+¡Y listo! La cuenta en el sitio de OpenAI está creada y estamos listos para continuar con el curso.
+
+Es importante recordar que OpenAI nos proporciona 5 dólares para utilizar durante su período de prueba, y que después de la finalización de este período, o al agotarse esta asignación gratuita, podrían realizarse cargos por el uso de las herramientas proporcionadas por la empresa.

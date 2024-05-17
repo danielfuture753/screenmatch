@@ -11,3 +11,10 @@ FindFirt retorna un optional eso quiere decir que puede tener o no un resultado 
 Cuando se deja el get solo nos trae todos los datos, cuando se hace .get().getTitulo() nos empieza  a traer los datos unicamente solicitados
 
 El DoubleSummaryStatistics nos trae los parametros count = que es la cantidad de registros que esta tomando sum = la suma de todas laas evaluacioes , min,  el averaga y el max
+
+Tranformacion del string a un tipo de categoria que ya tenemos en el for traemos los valores de la categoria , el if si las categorias coniciden con la que tenemos ya mapeadas, nos va a retornar el tipo de categoria encontrado
+
+En este caso lo que se hace es que la nueva fromString creada en categoria, observamos que hay peliculas que nos traen mas de una categoria separados por comas, lo que se hace aqui es que lo que queremos es eque nos separa las categorias delimitas por la coma y que nos traiga el prime que es representado con el 0, el split es para dividir, el trim es para que no nos traiga ningun valor vacio
+
+
+Es uana especie de entrenar a la IA, ya que no tenemos ese temperature, simpre que le pasemos el mismo texto, nos traera la misma traduccion, sin embargo si adicionamos este codigo no arroja ciertas variaciones en la traduccion 
