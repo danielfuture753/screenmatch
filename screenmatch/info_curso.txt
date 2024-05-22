@@ -1238,3 +1238,260 @@ Donde llenaremos el campo con el código recibido por mensaje de texto.
 ¡Y listo! La cuenta en el sitio de OpenAI está creada y estamos listos para continuar con el curso.
 
 Es importante recordar que OpenAI nos proporciona 5 dólares para utilizar durante su período de prueba, y que después de la finalización de este período, o al agotarse esta asignación gratuita, podrían realizarse cargos por el uso de las herramientas proporcionadas por la empresa.
+
+**************************************************21/05/2024************************************************************************
+
+Al trabajar con programación web, a menudo es necesario utilizar bases de datos para almacenar los datos de la aplicación desarrollada, ya sean datos de usuarios, direcciones o cualquier información que deba guardarse para el funcionamiento del programa.
+
+Por lo tanto, es muy interesante que los lenguajes de programación orientados a la web tengan formas de conectarse con la base de datos para poder realizar operaciones de crear, eliminar, consultar y actualizar registros almacenados en la base de datos. Es decir, que permitan realizar un CRUD directamente desde el lenguaje.
+
+Con esto, la mayoría de los lenguajes adoptaron soluciones nativas para manejar conexiones en bases de datos, como es el caso de JDBC (Java Database Connector) en Java. Sin embargo, el uso de este tipo de solución comenzó a ser un poco tedioso, ya que la configuración no era simple ni pequeña y debía realizarse repetidamente de manera idéntica.
+
+Por este motivo, comenzaron a surgir alternativas al uso de estas soluciones nativas, que en lugar de ofrecer una conexión "cruda" con la base de datos, es decir, que requiera la escritura manual de consultas y comandos SQL, comenzaron a presentar código encapsulado que ya incluye gran parte de lo que hacemos a diario con bases de datos, con funciones disponibles en el propio lenguaje, sin la necesidad de mezclarlo con SQL en cada nueva conexión con la base de datos. A este tipo de herramienta, le llamamos ORM, que en español significa Mapeamiento Objeto-Relacional.
+
+Dentro del ecosistema Java, la herramienta ORM más conocida es JPA, o Java Persistence API, que es una especificación creada con el objetivo de simplificar la conexión de bases de datos en aplicaciones Java, a partir de la definición de una interfaz común para la persistencia de datos en el lenguaje.
+
+JPA surge con el propósito de ofrecer una manera más fácil y estandarizada de mapear objetos y tablas de una base de datos relacional, y proporcionar una API para realizar operaciones CRUD utilizando Java.
+
+Para comprender mejor su funcionamiento, es importante familiarizarse con algunos conceptos clave de la especificación, como:
+
+Entidad: es una clase Java creada para representar un objeto almacenado en una base de datos. Cada entidad se mapea a una tabla de la base de datos.
+
+EntityManager: es la interfaz central de JPA, que se utiliza para realizar operaciones de persistencia, es decir, el CRUD. Es el EntityManager el que gestiona el ciclo de vida de las entidades dentro de una aplicación Java.
+
+JPQL: es el lenguaje de consulta de JPA, que permite escribir consultas personalizadas aprovechando la orientación a objetos, es decir, es como una mezcla de Java y SQL, o un lenguaje SQL orientado a objetos. La utilización de JPQL es interesante porque encapsula la llamada real a la base de datos y permite incluso cambiar la base de datos de la aplicación sin necesidad de modificar el código fuente.
+
+Es importante señalar, sin embargo, que JPA es solo una especificación entregada por el lenguaje y no una implementación real de conexión a la base de datos. JPA proporciona una interfaz que debe seguirse para las conexiones de bases de datos utilizando ORM, de manera que la conexión con la base de datos esté encapsulada para reducir el acoplamiento del código.
+
+Por lo tanto, hay varias implementaciones de JPA que realizan conexiones con bases de datos basándose en la especificación y que facilitan la vida del desarrollador, ya que solo es necesario entender JPA, y no necesariamente cómo funciona cada detalle de todas sus implementaciones.
+
+Una de las implementaciones más populares de JPA es Hibernate, que se utilizará durante el transcurso de este curso. Hibernate proporciona una biblioteca basada en JPA que permite el acceso a la base de datos de manera simplificada, mejorando la productividad en el ciclo de desarrollo y ofreciendo funciones avanzadas para la modelación de datos complejos y la gestión de persistencia, como el soporte para herencia y asociaciones y la integración con el proyecto Spring.
+
+Además, Hibernate se distribuye como Open Source y cuenta con una gran comunidad de desarrolladores que mantienen la herramienta, además de mucha documentación disponible para su consulta.
+
+***************************************************************************************************************************
+
+
+Hibernate es una de las implementaciones más utilizadas de JPA y proporciona varias anotaciones para la utilización del Mapeo Objeto-Relacional.
+
+¿Conocemos las principales?
+
+@Entity
+
+Esta anotación se utiliza para marcar una clase como una entidad que debe ser mapeada a una tabla de la base de datos. Cada entidad corresponde a una tabla en la base de datos.
+
+@Table
+
+Por defecto, Hibernate utiliza el nombre de la clase como el nombre de la tabla en la base de datos, realizando solo la conversión del formato de nomenclatura de PascalCase a SnakeCase, que es el formato utilizado en la base de datos. Sin embargo, si es necesario que el nombre de la clase sea diferente al nombre de la tabla en la base de datos, es posible utilizar esta anotación que permite personalizar el mapeo entre la clase de entidad y la tabla de la base de datos. Con ella, puedes especificar el nombre de la tabla, el esquema y las restricciones de la clave primaria.
+
+@Entity
+@Table(name = "mi_tabla")
+public class MiEntidad { ... }
+COPIA EL CÓDIGO
+@Id
+
+Marca un campo como la clave primaria de la entidad. Hibernate utiliza esta anotación para identificar de manera única los registros en la base de datos.
+
+@GeneratedValue
+
+Utilizada en conjunto con @Id, esta anotación específica cómo se genera automáticamente la clave primaria. Puede utilizarse con estrategias como AUTO, IDENTITY, SEQUENCE o TABLE, según el tipo de base de datos.
+
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+COPIA EL CÓDIGO
+@Column
+
+Similar a lo que sucede con la anotación @Table, Hibernate utiliza los nombres de los atributos y los considera idénticos a los nombres de las columnas en la base de datos. En caso de que sea necesario utilizar nombres diferentes, puedes configurar el nombre de la columna, así como su tipo y si es obligatoria.
+
+@Column(name = "nombre_completo", nullable = false)
+private String nombre;
+COPIA EL CÓDIGO
+@OneToMany y @ManyToOne
+
+Se utilizan para mapear relaciones uno a muchos y muchos a uno entre entidades. Definen las asociaciones entre las tablas en la base de datos.
+
+@Entity
+public class Autor {
+    @OneToMany(mappedBy = "autor")
+    private List<Libro> libros;
+}
+
+@Entity
+public class Libro {
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
+}
+COPIA EL CÓDIGO
+@ManyToMany
+
+La anotación @ManyToMany se utiliza para mapear relaciones muchos a muchos entre entidades.
+
+@OneToOne
+
+La anotación @OneToOne se utiliza para mapear relaciones uno a uno entre entidades.
+
+@JoinColumn
+
+La anotación @JoinColumn se utiliza para especificar la columna que se utilizará para representar una relación entre entidades. Se utiliza con frecuencia en conjunto con @ManyToOne y @OneToOne.
+
+@ManyToOne
+@JoinColumn(name = "autor_id")
+private Autor autor;
+COPIA EL CÓDIGO
+@JoinTable
+
+La anotación @JoinTable se utiliza para mapear tablas de unión en relaciones muchos a muchos. Especifica la tabla intermedia que conecta dos entidades.
+
+@Entity
+public class Estudiante {
+    @ManyToMany
+    @JoinTable(name = "inscripcion",
+               joinColumns = @JoinColumn(name = "estudiante_id"),
+               inverseJoinColumns = @JoinColumn(name = "curso_id"))
+    private List<Curso> cursos;
+}
+COPIA EL CÓDIGO
+@Transient
+
+La anotación @Transient se utiliza para marcar una propiedad como no persistente. Esto significa que la propiedad no se mapeará a una columna en la base de datos.
+
+@Transient
+private transientProperty;
+COPIA EL CÓDIGO
+@Enumerated
+
+La anotación @Enumerated se utiliza para mapear campos enumerados (enum) a columnas de la base de datos.
+
+@Enumerated(EnumType.STRING)
+private Status status;
+COPIA EL CÓDIGO
+@NamedQuery
+
+Esta anotación se utiliza para definir consultas JPQL (Java Persistence Query Language) nombradas que pueden reutilizarse en varias partes del código.
+
+@Entity
+@NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c")
+public class Cliente { ... }
+COPIA EL CÓDIGO
+@Cascade
+
+La anotación @Cascade se utiliza para especificar el comportamiento de cascada de operaciones de persistencia, como guardar y eliminar, en relaciones. Por ejemplo, puedes configurar para que las operaciones de guardado en cascada afecten a entidades relacionadas.
+
+@OneToMany(mappedBy = "departamento")
+@Cascade(CascadeType.SAVE_UPDATE)
+private List<Empleado> empleados;
+COPIA EL CÓDIGO
+@Embeddable y @Embedded
+
+Estas anotaciones se utilizan para representar tipos integrados (embeddable types) que pueden ser utilizados como componentes en entidades.
+
+@Embeddable
+public class Direccion{ ... }
+
+@Entity
+public class Cliente {
+    @Embedded
+    private Direccion direccion;
+}
+COPIA EL CÓDIGO
+Además de estas anotaciones, hay muchas otras que se pueden consultar en la documentación de anotaciones de Hibernate, y que facilitan mucho la vida diaria de los desarrolladores que utilizan el ORM.
+
+************************************************************************************************
+
+Al trabajar con tablas en bases de datos, las claves primarias son esenciales. Por lo general, creamos un identificador único o ID para representar estas claves de la mejor manera posible.
+
+Las claves primarias se utilizan para garantizar que cada entidad se guarde de manera única. Si cuando trabajamos con Java, la JVM se encarga de asignar a cada objeto un lugar en la memoria, en la base de datos esto debe configurarse. Utilizar un ID suele ser una buena forma de hacerlo.
+
+Existen varias formas de generar IDs en la base de datos, y JPA también nos ayuda con esto. Solo necesitas utilizar la anotación GeneratedValue y elegir la estrategia de generación del ID. ¡Posteriormente hablaremos sobre estas diversas estrategias existentes, ¿de acuerdo?!
+
+Estrategia AUTO
+
+La estrategia AUTO es la estrategia predeterminada de generación de ID en JPA. Cuando se utiliza esta estrategia, es JPA la que determina la mejor estrategia a utilizar, basándose en la base de datos específica que estás utilizando.
+
+Aquí tienes un ejemplo de cómo implementar la estrategia AUTO en un código:
+
+@Entity
+public class Entidad {
+ 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+
+}
+COPIA EL CÓDIGO
+Esta estrategia es bastante práctica, ya que JPA se encarga de toda la lógica de generación de ID. Sin embargo, puede ser poco flexible si necesitas un mayor control sobre la generación de ID.
+
+Estrategia SEQUENCE
+
+La estrategia SEQUENCE utiliza una secuencia de la base de datos para generar IDs. Con esta estrategia, la secuencia se incrementa cada vez que se genera un ID, asegurando que cada ID sea único.
+
+Aquí tienes un ejemplo de cómo implementar la estrategia SEQUENCE:
+
+@Entity
+public class Entidad {
+ 
+    @Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    private Long id;
+
+}
+COPIA EL CÓDIGO
+Esta estrategia es especialmente útil para bases de datos que admiten secuencias, ya que es muy eficiente y evita la posibilidad de colisiones de ID.
+
+Estrategia IDENTITY
+
+La estrategia IDENTITY hace uso de columnas de autoincremento proporcionadas por algunas bases de datos. Cada vez que se inserta una nueva entidad en la base de datos, la columna de ID autoincrementado se actualiza para generar un nuevo ID.
+
+Ejemplo de implementación de esta estrategia:
+
+@Entity
+public class Entidad {
+ 
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+
+}
+COPIA EL CÓDIGO
+Esta estrategia es útil si estás utilizando una base de datos que admite columnas de autoincremento, como PostgreSQL, MySQL o SQL Server.
+
+Estrategia TABLE
+
+Por último, tenemos la estrategia TABLE. Esta estrategia utiliza una tabla de base de datos separada para generar IDs. Es menos eficiente que las otras estrategias, pero tiene la ventaja de ser portátil entre diferentes proveedores de bases de datos.
+
+Ejemplo de implementación de esta estrategia:
+
+@Entity
+public class Entidad {
+ 
+    @Id
+    @GeneratedValue(strategy=GenerationType.TABLE)
+    private Long id;
+
+}
+COPIA EL CÓDIGO
+Comprender estas estrategias y saber cuándo utilizar cada una de ellas te permitirá utilizar JPA de manera más eficiente, asegurando que tus datos se persistan de manera confiable y segura. Recuerda, la elección de la estrategia de ID correcta puede tener un gran impacto en la eficiencia de tu aplicación.
+
+******************************************************************************************************************************
+Te unes como desarrollador en el sistema Gatito Petshop. El objetivo de Gatito es tener un sistema eficiente para gestionar todas las mascotas de tu tienda. El equipo decidió utilizar Hibernate en la aplicación para mapear las entidades.
+
+Pero mientras revisaba el código, encontró la siguiente anotación de mapeo:
+
+@Entity
+@Table(name = "pets")
+public class Pets {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String especies;
+}
+COPIA EL CÓDIGO
+¿Qué significa la anotación @GeneratedValue(strategy = GenerationType.IDENTITY) en esta clase?
+
+Esta anotación indica que el valor de ID de una mascota se genera y aumenta automáticamente cada vez que se inserta una nueva fila en la tabla de mascotas.
+
+
+La anotación se utiliza en las claves primarias e indica que la base de datos generará automáticamente el valor de ID de la mascota cuando se inserte una nueva fila.
